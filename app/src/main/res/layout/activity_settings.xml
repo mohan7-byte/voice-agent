@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/oled_background"
+    android:paddingTop="8dp"
+    android:paddingBottom="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <!-- Double-click volume setup -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/volumeSetupCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_purple_card"
+                android:gravity="center_vertical"
+                android:minHeight="64dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="⚡"
+                    android:textColor="@color/white_primary"
+                    android:textSize="18sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="8dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Double-Click Volume Setup"
+                        android:textColor="@color/white_primary"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Tap to open Accessibility &amp; turn on Voice trigger"
+                        android:textColor="@color/white_secondary"
+                        android:textSize="9sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="24dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="›"
+                    android:textColor="@color/white_primary"
+                    android:textSize="22sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Playbooks & Memory Section -->
+        <TextView
+            style="@style/SettingsSectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PLAYBOOKS &amp; EXPERIENTIAL MEMORY"
+            android:layout_marginBottom="6dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/oled_surface"
+            app:cardCornerRadius="13dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/border_white_10"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Exact coordinates &amp; self-learned app rules"
+                    android:textColor="@color/white_secondary"
+                    android:textSize="9sp"
+                    android:layout_marginBottom="8dp" />
+
+                <EditText
+                    android:id="@+id/playbooksEditor"
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:background="@drawable/bg_input_field"
+                    android:gravity="top|start"
+                    android:inputType="textMultiLine"
+                    android:padding="10dp"
+                    android:scrollbars="vertical"
+                    android:textColor="@color/white_primary"
+                    android:textColorHint="@color/white_tertiary"
+                    android:textSize="10sp"
+                    android:fontFamily="monospace" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/saveRulesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:text="Save Rules"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_primary"
+                        android:textSize="11sp"
+                        app:backgroundTint="@color/purple_accent"
+                        app:cornerRadius="9dp" />
+
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="1dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/openFilesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:text="Open in My Files"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white_primary"
+                        android:textSize="11sp"
+                        app:backgroundTint="@color/oled_surface_alt"
+                        app:cornerRadius="9dp"
+                        app:strokeColor="@color/border_white_15"
+                        app:strokeWidth="1dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Gemini API Key -->
+        <TextView
+            style="@style/SettingsSectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GEMINI API KEY"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/apiKeyEditText"
+            style="@style/SettingsInputText"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_input_field"
+            android:hint="AIzaSy..."
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:imeOptions="actionDone" />
+
+        <!-- Switches -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/SettingsRowTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Auto-Disconnect on Silence (4s)" />
+                <TextView
+                    style="@style/SettingsRowSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Close call after finishing task" />
+            </LinearLayout>
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/autoDisconnectSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:useMaterialThemeColors="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/SettingsRowTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Auto-Connect on Launch" />
+                <TextView
+                    style="@style/SettingsRowSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Listen immediately when triggered" />
+            </LinearLayout>
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/autoConnectSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:useMaterialThemeColors="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    style="@style/SettingsRowTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Speaker Echo Guard" />
+                <TextView
+                    style="@style/SettingsRowSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Prevents speaker feedback loop" />
+            </LinearLayout>
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/speakerEchoGuardSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                app:useMaterialThemeColors="false" />
+        </LinearLayout>
+
+        <!-- Instructions -->
+        <TextView
+            style="@style/SettingsSectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="ASSISTANT INSTRUCTIONS (JARVIS PROTOCOL)"
+            android:layout_marginBottom="6dp" />
+
+        <EditText
+            android:id="@+id/instructionsEditText"
+            style="@style/SettingsInputText"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_input_field"
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:text="You are Voice (Jarvis), an ultra-fast autonomous Android agent with physical device control and experiential memory." />
+
+        <!-- Model Spinner -->
+        <TextView
+            style="@style/SettingsSectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TARGET MODEL"
+            android:layout_marginBottom="6dp" />
+
+        <Spinner
+            android:id="@+id/modelSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/bg_input_field"
+            android:spinnerMode="dropdown" />
+
+        <!-- Voice Profile Spinner -->
+        <TextView
+            style="@style/SettingsSectionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="VOICE PROFILE"
+            android:layout_marginBottom="6dp" />
+
+        <Spinner
+            android:id="@+id/voiceSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="18dp"
+            android:background="@drawable/bg_input_field"
+            android:spinnerMode="dropdown" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveButton"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Save Configuration"
+            android:textAllCaps="false"
+            android:textColor="@color/white_primary"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/purple_accent"
+            app:cornerRadius="12dp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/oled_background</item>
+        <item name="android:navigationBarColor">@color/oled_background</item>
+        <item name="android:windowBackground">@color/oled_background</item>
+        <item name="colorPrimary">@color/purple_accent</item>
+        <item name="colorSecondary">@color/purple_accent</item>
+    </style>
+
+    <style name="TranslucentFloatingTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="SettingsSectionLabel" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textColor">@color/white_secondary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SettingsRowTitle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/white_primary</item>
+    </style>
+
+    <style name="SettingsRowSubtitle" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">@color/white_tertiary</item>
+    </style>
+
+    <style name="SettingsInputText" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white_primary</item>
+        <item name="android:textColorHint">@color/white_secondary</item>
+    </style>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="oled_background">#0D101A</color>
+    <color name="oled_surface">#121420</color>
+    <color name="oled_surface_alt">#171A27</color>
+    <color name="purple_accent">#7C3AED</color>
+    <color name="purple_accent_dark">#5B21B6</color>
+    <color name="purple_accent_soft">#241642</color>
+    <color name="cyan_accent">#06B6D4</color>
+    <color name="amber_accent">#FBBF24</color>
+    <color name="danger_red">#EF4444</color>
+    <color name="white_primary">#F8F8FC</color>
+    <color name="white_secondary">#A7A9B7</color>
+    <color name="white_tertiary">#777B8D</color>
+    <color name="border_white_15">#26FFFFFF</color>
+    <color name="border_white_10">#1AFFFFFF</color>
+    <color name="input_black">#000000</color>
+    <color name="switch_off_track">#303444</color>
+    <color name="switch_off_thumb">#D7D9E2</color>
+    <color name="dropdown_background">#171A27</color>
+    <color name="dropdown_selected">#241642</color>
+</resources>
