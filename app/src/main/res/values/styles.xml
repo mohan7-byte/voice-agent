@@ -8,13 +8,15 @@
         <item name="colorSecondary">@color/purple_accent</item>
     </style>
 
-    <style name="TranslucentFloatingTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="TranslucentFloatingTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="colorPrimary">@color/purple_accent</item>
+        <item name="colorSecondary">@color/purple_accent</item>
     </style>
 
     <style name="SettingsSectionLabel" parent="TextAppearance.MaterialComponents.Caption">

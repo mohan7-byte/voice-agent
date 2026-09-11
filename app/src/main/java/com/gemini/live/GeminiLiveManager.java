@@ -153,7 +153,6 @@ public class GeminiLiveManager {
         try {
             JSONObject msg = new JSONObject(jsonText);
 
-            // Tool Calls
             if (msg.has("toolCall")) {
                 JSONObject toolCall = msg.getJSONObject("toolCall");
                 JSONArray calls = toolCall.getJSONArray("functionCalls");
@@ -163,7 +162,6 @@ public class GeminiLiveManager {
                 }
             }
 
-            // Audio output chunks
             if (msg.has("serverContent")) {
                 JSONObject sc = msg.getJSONObject("serverContent");
                 if (sc.optBoolean("interrupted", false)) {

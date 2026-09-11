@@ -88,17 +88,14 @@
                 android:layout_height="36dp"
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/bg_icon_btn"
-                android:src="@android:drawable/ic_btn_speak_now"
-                app:tint="@color/white_primary" />
+                android:src="@android:drawable/ic_btn_speak_now" />
 
             <ImageButton
                 android:id="@+id/btnEnd"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="@drawable/bg_icon_btn"
-                android:backgroundTint="@color/danger_red"
-                android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="@color/white_primary" />
+                android:src="@android:drawable/ic_menu_close_clear_cancel" />
         </LinearLayout>
 
         <ImageButton
@@ -107,8 +104,7 @@
             android:layout_height="36dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/bg_icon_btn"
-            android:src="@android:drawable/ic_menu_manage"
-            app:tint="@color/white_secondary" />
+            android:src="@android:drawable/ic_menu_manage" />
 
     </LinearLayout>
 

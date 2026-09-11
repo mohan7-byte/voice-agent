@@ -1,2 +1,2 @@
-rootProject.name = "VoiceNative"
+rootProject.name = "VoiceAgent"
 include ':app'

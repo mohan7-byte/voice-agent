@@ -5,11 +5,11 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.gemini.live"
+        applicationId "com.voice.agent"
         minSdk 24
         targetSdk 34
-        versionCode 15
-        versionName "2.1-Native"
+        versionCode 16
+        versionName "2.2-Native"
     }
     buildTypes {
         release {

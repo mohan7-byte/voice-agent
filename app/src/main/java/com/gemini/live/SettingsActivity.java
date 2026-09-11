@@ -2,12 +2,6 @@ package com.gemini.live;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.InsetDrawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -15,22 +9,14 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.io.File;
 import java.io.FileWriter;
-import java.util.Arrays;
-import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "voice_prefs";

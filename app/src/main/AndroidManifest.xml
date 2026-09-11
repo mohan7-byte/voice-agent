@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
     <application
-        android:label="Voice"
+        android:label="Voice Agent"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme">
