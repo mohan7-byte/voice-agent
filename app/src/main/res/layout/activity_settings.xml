@@ -184,7 +184,7 @@
             android:singleLine="true"
             android:imeOptions="actionDone" />
 
-        <!-- Switches -->
+        <!-- Switches: Using 100% Reliable SwitchCompat -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="54dp"
@@ -206,11 +206,10 @@
                     android:layout_height="wrap_content"
                     android:text="Close call after finishing task" />
             </LinearLayout>
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/autoDisconnectSwitch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:useMaterialThemeColors="false" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -234,11 +233,10 @@
                     android:layout_height="wrap_content"
                     android:text="Listen immediately when triggered" />
             </LinearLayout>
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/autoConnectSwitch"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:useMaterialThemeColors="false" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout
@@ -262,12 +260,11 @@
                     android:layout_height="wrap_content"
                     android:text="Prevents speaker feedback loop" />
             </LinearLayout>
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/speakerEchoGuardSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
-                app:useMaterialThemeColors="false" />
+                android:checked="true" />
         </LinearLayout>
 
         <!-- Instructions -->
