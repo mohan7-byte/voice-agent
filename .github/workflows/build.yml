@@ -55,7 +55,7 @@ jobs:
           EOF
 
           cat << 'EOF' > settings.gradle
-          rootProject.name = "VoiceNative"
+          rootProject.name = "VoiceAgent"
           include ':app'
           EOF
 
@@ -77,6 +77,7 @@ jobs:
           }
           EOF
 
+          # New App ID: com.voice.agent (Completely Separate App)
           cat << 'EOF' > app/build.gradle
           apply plugin: 'com.android.application'
 
@@ -85,11 +86,11 @@ jobs:
               compileSdk 34
 
               defaultConfig {
-                  applicationId "com.gemini.live"
+                  applicationId "com.voice.agent"
                   minSdk 24
                   targetSdk 34
-                  versionCode 15
-                  versionName "2.1-Native"
+                  versionCode 16
+                  versionName "2.2-Native"
               }
               buildTypes {
                   release {
@@ -110,11 +111,10 @@ jobs:
           }
           EOF
 
-          # Strings & Accessibility XML
           cat << 'EOF' > app/src/main/res/values/strings.xml
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
-              <string name="app_name">Voice</string>
+              <string name="app_name">Voice Agent</string>
               <string name="accessibility_desc">Enables autonomous device controls, sniper coordinates, and experiential memory.</string>
           </resources>
           EOF
@@ -132,7 +132,6 @@ jobs:
               android:notificationTimeout="50" />
           EOF
 
-          # Colors (Cleaned & Corrected)
           cat << 'EOF' > app/src/main/res/values/colors.xml
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
@@ -158,7 +157,7 @@ jobs:
           </resources>
           EOF
 
-          # Styles & Themes
+          # MaterialComponents Themes (Crash Fixed)
           cat << 'EOF' > app/src/main/res/values/styles.xml
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
@@ -170,13 +169,15 @@ jobs:
                   <item name="colorSecondary">@color/purple_accent</item>
               </style>
 
-              <style name="TranslucentFloatingTheme" parent="Theme.AppCompat.NoActionBar">
+              <style name="TranslucentFloatingTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
                   <item name="android:windowBackground">@android:color/transparent</item>
                   <item name="android:colorBackgroundCacheHint">@null</item>
                   <item name="android:windowIsTranslucent">true</item>
                   <item name="android:windowAnimationStyle">@android:style/Animation</item>
                   <item name="android:windowNoTitle">true</item>
                   <item name="android:windowContentOverlay">@null</item>
+                  <item name="colorPrimary">@color/purple_accent</item>
+                  <item name="colorSecondary">@color/purple_accent</item>
               </style>
 
               <style name="SettingsSectionLabel" parent="TextAppearance.MaterialComponents.Caption">
@@ -334,17 +335,14 @@ jobs:
                           android:layout_height="36dp"
                           android:layout_marginEnd="6dp"
                           android:background="@drawable/bg_icon_btn"
-                          android:src="@android:drawable/ic_btn_speak_now"
-                          app:tint="@color/white_primary" />
+                          android:src="@android:drawable/ic_btn_speak_now" />
 
                       <ImageButton
                           android:id="@+id/btnEnd"
                           android:layout_width="36dp"
                           android:layout_height="36dp"
                           android:background="@drawable/bg_icon_btn"
-                          android:backgroundTint="@color/danger_red"
-                          android:src="@android:drawable/ic_menu_close_clear_cancel"
-                          app:tint="@color/white_primary" />
+                          android:src="@android:drawable/ic_menu_close_clear_cancel" />
                   </LinearLayout>
 
                   <ImageButton
@@ -353,15 +351,14 @@ jobs:
                       android:layout_height="36dp"
                       android:layout_marginStart="8dp"
                       android:background="@drawable/bg_icon_btn"
-                      android:src="@android:drawable/ic_menu_manage"
-                      app:tint="@color/white_secondary" />
+                      android:src="@android:drawable/ic_menu_manage" />
 
               </LinearLayout>
 
           </RelativeLayout>
           EOF
 
-          # Layouts: Settings Screen (activity_settings.xml - ALL TYPOS FIXED)
+          # Layouts: Settings Screen (activity_settings.xml)
           cat << 'EOF' > app/src/main/res/layout/activity_settings.xml
           <?xml version="1.0" encoding="utf-8"?>
           <androidx.core.widget.NestedScrollView
@@ -703,7 +700,7 @@ jobs:
           </androidx.core.widget.NestedScrollView>
           EOF
 
-          # Manifest
+          # Manifest with Voice Agent Identity
           cat << 'EOF' > app/src/main/AndroidManifest.xml
           <?xml version="1.0" encoding="utf-8"?>
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
@@ -723,7 +720,7 @@ jobs:
               <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
 
               <application
-                  android:label="Voice"
+                  android:label="Voice Agent"
                   android:icon="@mipmap/ic_launcher"
                   android:requestLegacyExternalStorage="true"
                   android:theme="@style/AppTheme">
@@ -768,7 +765,7 @@ jobs:
           </manifest>
           EOF
 
-          # ScreenCaptureService.java (1:1 288x592 Capture)
+          # ScreenCaptureService.java
           cat << 'EOF' > app/src/main/java/com/gemini/live/ScreenCaptureService.java
           package com.gemini.live;
 
@@ -924,7 +921,7 @@ jobs:
           }
           EOF
 
-          # VolumeTriggerService.java: Sniper Normalization, Magnetic Snap & Playbooks
+          # VolumeTriggerService.java
           cat << 'EOF' > app/src/main/java/com/gemini/live/VolumeTriggerService.java
           package com.gemini.live;
 
@@ -1356,18 +1353,12 @@ jobs:
           }
           EOF
 
-          # SettingsActivity.java (ChatGPT's Settings UI with Fixes)
+          # SettingsActivity.java
           cat << 'EOF' > app/src/main/java/com/gemini/live/SettingsActivity.java
           package com.gemini.live;
 
           import android.content.Intent;
           import android.content.SharedPreferences;
-          import android.content.res.ColorStateList;
-          import android.graphics.Color;
-          import android.graphics.drawable.Drawable;
-          import android.graphics.drawable.GradientDrawable;
-          import android.graphics.drawable.InsetDrawable;
-          import android.graphics.drawable.LayerDrawable;
           import android.os.Bundle;
           import android.os.Environment;
           import android.os.StrictMode;
@@ -1375,22 +1366,14 @@ jobs:
           import android.provider.Settings;
           import android.text.InputType;
           import android.text.method.PasswordTransformationMethod;
-          import android.view.Gravity;
-          import android.view.View;
-          import android.view.ViewGroup;
           import android.widget.ArrayAdapter;
           import android.widget.EditText;
           import android.widget.Spinner;
-          import android.widget.TextView;
           import android.widget.Toast;
-          import androidx.annotation.NonNull;
           import androidx.appcompat.app.AppCompatActivity;
-          import com.google.android.material.button.MaterialButton;
           import com.google.android.material.materialswitch.MaterialSwitch;
           import java.io.File;
           import java.io.FileWriter;
-          import java.util.Arrays;
-          import java.util.List;
 
           public class SettingsActivity extends AppCompatActivity {
               private static final String PREFS_NAME = "voice_prefs";
@@ -1524,7 +1507,7 @@ jobs:
           }
           EOF
 
-          # GeminiLiveManager.java: Native OkHttp WebSocket + AudioRecord (16kHz) + AudioTrack (24kHz)
+          # GeminiLiveManager.java
           cat << 'EOF' > app/src/main/java/com/gemini/live/GeminiLiveManager.java
           package com.gemini.live;
 
@@ -1681,7 +1664,6 @@ jobs:
                   try {
                       JSONObject msg = new JSONObject(jsonText);
 
-                      // Tool Calls
                       if (msg.has("toolCall")) {
                           JSONObject toolCall = msg.getJSONObject("toolCall");
                           JSONArray calls = toolCall.getJSONArray("functionCalls");
@@ -1691,7 +1673,6 @@ jobs:
                           }
                       }
 
-                      // Audio output chunks
                       if (msg.has("serverContent")) {
                           JSONObject sc = msg.getJSONObject("serverContent");
                           if (sc.optBoolean("interrupted", false)) {
@@ -1794,26 +1775,26 @@ jobs:
           }
           EOF
 
-          # MainActivity.java: Native Floating Capsule Controller
+          # MainActivity.java (AppCompatActivity + Material Crash Fixed + Runtime Permissions)
           cat << 'EOF' > app/src/main/java/com/gemini/live/MainActivity.java
           package com.gemini.live;
 
-          import android.app.Activity;
+          import android.Manifest;
           import android.content.Intent;
           import android.content.SharedPreferences;
+          import android.content.pm.PackageManager;
           import android.graphics.Color;
           import android.graphics.drawable.ColorDrawable;
           import android.os.Build;
           import android.os.Bundle;
           import android.view.KeyEvent;
           import android.view.View;
-          import android.view.WindowManager;
-          import android.widget.ImageButton;
           import android.widget.LinearLayout;
           import android.widget.TextView;
+          import androidx.appcompat.app.AppCompatActivity;
           import com.google.android.material.button.MaterialButton;
 
-          public class MainActivity extends Activity implements GeminiLiveManager.LiveCallback {
+          public class MainActivity extends AppCompatActivity implements GeminiLiveManager.LiveCallback {
               private GeminiLiveManager liveManager;
               private TextView statusText, subText;
               private MaterialButton btnConnect;
@@ -1832,6 +1813,21 @@ jobs:
 
                   getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                   setContentView(R.layout.activity_main);
+
+                  // Request Runtime Permissions
+                  String[] perms = {
+                      Manifest.permission.RECORD_AUDIO,
+                      Manifest.permission.CAMERA,
+                      Manifest.permission.CALL_PHONE,
+                      Manifest.permission.SEND_SMS,
+                      Manifest.permission.READ_CONTACTS
+                  };
+                  for (String p : perms) {
+                      if (checkSelfPermission(p) != PackageManager.PERMISSION_GRANTED) {
+                          requestPermissions(perms, 101);
+                          break;
+                      }
+                  }
 
                   prefs = getSharedPreferences("voice_prefs", MODE_PRIVATE);
                   liveManager = new GeminiLiveManager(this, this);
@@ -1928,15 +1924,15 @@ jobs:
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Voice-Native-APK
+          name: Voice-Agent-APK
           path: app/build/outputs/apk/debug/app-debug.apk
 
       - name: Create Native Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete v2.1-Native --yes || true
-          git tag -d v2.1-Native || true
-          gh release create v2.1-Native app/build/outputs/apk/debug/app-debug.apk \
-            --title "Voice Native v2.1 (Pure Android & OkHttp Live)" \
-            --notes "Voice v2.1 Native: Zero WebView (30MB RAM), OkHttp WebSocket, AudioRecord 16kHz & AudioTrack 24kHz, 288x592 Sniper Tap, Material Settings Screen." || true
+          gh release delete v2.2-Native --yes || true
+          git tag -d v2.2-Native || true
+          gh release create v2.2-Native app/build/outputs/apk/debug/app-debug.apk \
+            --title "Voice Agent v2.2 (Native Pure Android)" \
+            --notes "Voice Agent v2.2 Native: App ID com.voice.agent, AppCompat & Material Crash Fixed, Runtime Permissions, OkHttp WebSocket & AudioRecord." || true
