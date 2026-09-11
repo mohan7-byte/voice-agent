@@ -1,10 +1,12 @@
 package com.gemini.live;
 
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -43,17 +45,23 @@ public class GeminiLiveManager {
     }
 
     public void startSession(String apiKey, String model, String voice, String prompt) {
-        String endpoint = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=" + apiKey;
-        Request request = new Request.Builder().url(endpoint).build();
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            updateState("idle", "API Key Missing", "Configure in Settings");
+            return;
+        }
 
+        updateState("idle", "Connecting...", "Reaching Google...");
         initAudioTrack();
+
+        String endpoint = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=" + apiKey.trim();
+        Request request = new Request.Builder().url(endpoint).build();
 
         webSocket = client.newWebSocket(request, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket ws, Response response) {
                 sendSetupPacket(ws, model, voice, prompt);
                 startMicStream(ws);
-                updateState("listening", "Listening", "Go ahead");
+                updateState("listening", "Listening", "Go ahead, speak");
             }
 
             @Override
@@ -63,11 +71,14 @@ public class GeminiLiveManager {
 
             @Override
             public void onClosed(WebSocket ws, int code, String reason) {
+                updateState("idle", "Closed (" + code + ")", reason != null ? reason : "Ready");
                 stopSession();
             }
 
             @Override
             public void onFailure(WebSocket ws, Throwable t, Response response) {
+                String errorMsg = t != null ? t.getMessage() : "Network error";
+                updateState("idle", "Connection Failed", errorMsg);
                 stopSession();
             }
         });
@@ -76,7 +87,9 @@ public class GeminiLiveManager {
     private void sendSetupPacket(WebSocket ws, String model, String voice, String prompt) {
         try {
             JSONObject setup = new JSONObject();
-            setup.put("model", model.isEmpty() ? "models/gemini-3.1-flash-live-preview" : model);
+            String cleanModel = (model == null || model.trim().isEmpty()) ? "models/gemini-3.1-flash-live-preview" : model.trim();
+            if (!cleanModel.startsWith("models/")) cleanModel = "models/" + cleanModel;
+            setup.put("model", cleanModel);
 
             JSONObject generationConfig = new JSONObject();
             JSONArray modalities = new JSONArray();
@@ -85,18 +98,18 @@ public class GeminiLiveManager {
 
             JSONObject voiceConfig = new JSONObject();
             JSONObject prebuiltVoice = new JSONObject();
-            prebuiltVoice.put("voiceName", voice.isEmpty() ? "Puck" : voice);
+            prebuiltVoice.put("voiceName", (voice == null || voice.trim().isEmpty()) ? "Puck" : voice.trim());
             voiceConfig.put("prebuiltVoiceConfig", prebuiltVoice);
             JSONObject speechConfig = new JSONObject();
             speechConfig.put("voiceConfig", voiceConfig);
             generationConfig.put("speechConfig", speechConfig);
             setup.put("generationConfig", generationConfig);
 
-            if (!prompt.isEmpty()) {
+            if (prompt != null && !prompt.trim().isEmpty()) {
                 JSONObject sysInst = new JSONObject();
                 JSONArray parts = new JSONArray();
                 JSONObject part = new JSONObject();
-                part.put("text", prompt);
+                part.put("text", prompt.trim());
                 parts.put(part);
                 sysInst.put("parts", parts);
                 setup.put("systemInstruction", sysInst);
@@ -105,22 +118,34 @@ public class GeminiLiveManager {
             JSONObject root = new JSONObject();
             root.put("setup", setup);
             ws.send(root.toString());
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            updateState("idle", "Setup Error", e.getMessage());
+        }
     }
 
     private void startMicStream(WebSocket ws) {
         int sampleRate = 16000;
-        int bufferSize = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        int minBuf = AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        int recordBufSize = Math.max(minBuf, 4096);
+
         try {
-            audioRecord = new AudioRecord(MediaRecorder.AudioSource.VOICE_RECOGNITION, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize * 2);
+            // Using AudioSource.MIC for 100% reliable hardware capture on Samsung
+            audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, recordBufSize);
+
+            if (audioRecord.getState() != AudioRecord.STATE_INITIALIZED) {
+                updateState("idle", "Mic Blocked", "AudioRecord init failed");
+                return;
+            }
+
             audioRecord.startRecording();
             isRecording = true;
 
             new Thread(() -> {
-                byte[] buffer = new byte[1024];
+                // 2048 bytes = 1024 samples = 64ms sweet spot
+                byte[] buffer = new byte[2048];
                 while (isRecording) {
                     if (isSpeaking) {
-                        SystemClock.sleep(20);
+                        SystemClock.sleep(25);
                         continue;
                     }
                     int read = audioRecord.read(buffer, 0, buffer.length);
@@ -139,20 +164,59 @@ public class GeminiLiveManager {
                     }
                 }
             }).start();
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            updateState("idle", "Mic Error", e.getMessage());
+        }
     }
 
     private void initAudioTrack() {
         int sampleRate = 24000;
-        int bufferSize = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        audioTrack = new AudioTrack(android.media.AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize * 2, AudioTrack.MODE_STREAM);
-        audioTrack.play();
+        int minBuf = AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        int bufferSize = (minBuf > 0) ? minBuf * 2 : 8192;
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                audioTrack = new AudioTrack.Builder()
+                    .setAudioAttributes(new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                        .build())
+                    .setAudioFormat(new AudioFormat.Builder()
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                        .setSampleRate(sampleRate)
+                        .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
+                        .build())
+                    .setBufferSizeInBytes(bufferSize)
+                    .setTransferMode(AudioTrack.MODE_STREAM)
+                    .build();
+            } else {
+                audioTrack = new AudioTrack(android.media.AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
+            }
+            audioTrack.play();
+        } catch (Exception e) {
+            updateState("idle", "Speaker Error", e.getMessage());
+        }
     }
 
     private void handleMessage(WebSocket ws, String jsonText) {
         try {
             JSONObject msg = new JSONObject(jsonText);
 
+            // Handshake Confirmation
+            if (msg.has("setupComplete")) {
+                updateState("listening", "Listening", "Ready to talk");
+            }
+
+            // Error handling
+            if (msg.has("error")) {
+                JSONObject err = msg.getJSONObject("error");
+                String errMsg = err.optString("message", "API Error");
+                updateState("idle", "Gemini Error", errMsg);
+                stopSession();
+                return;
+            }
+
+            // Tool Calls
             if (msg.has("toolCall")) {
                 JSONObject toolCall = msg.getJSONObject("toolCall");
                 JSONArray calls = toolCall.getJSONArray("functionCalls");
@@ -162,6 +226,7 @@ public class GeminiLiveManager {
                 }
             }
 
+            // Streaming Audio Output
             if (msg.has("serverContent")) {
                 JSONObject sc = msg.getJSONObject("serverContent");
                 if (sc.optBoolean("interrupted", false)) {
